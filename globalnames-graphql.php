@@ -88,13 +88,9 @@ function global_names_index($query)
 // test
 if (1)
 {
-	$response = global_names_index(array('Begonia'));
-	
+	$response = global_names_index(array('Begonia'));	
 	print_r($response);
-	
 	echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
 }
-
 
 ?>
