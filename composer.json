@@ -1,0 +1,12 @@
+{
+    "name": "rpage/graphql-experiments",
+    "require": {
+        "webonyx/graphql-php": "^14.11"
+    },
+    "authors": [
+        {
+            "name": "Roderic Page",
+            "email": "rdmpage@gmail.com"
+        }
+    ]
+}
