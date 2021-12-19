@@ -37,6 +37,45 @@ Need to do the following:
 // Code to resolve queries, in this case using Wikidata
 require_once (dirname(__FILE__) . '/wikidata.php');
 
+//----------------------------------------------------------------------------------------
+class ThingType extends ObjectType
+{
+
+    public function __construct()
+    {
+        error_log('ThingType');
+        $config = [
+			'description' =>  "An entity in Wikidata",
+            'fields' => function(){
+                return [
+                     
+                    'id' => [
+                        'type' => Type::string(),
+                        'description' => "Id of thing"
+                    ],   
+                                     
+                    'name' => [
+                        'type' => Type::listOf(Type::string()),
+                        'description' => "Name of the thing."
+                    ],            
+                    
+                   'type' => [
+                        'type' => Type::listOf(Type::string()),
+                        'description' => "Type(s) of thing"
+                    ],
+                                
+                                                       
+                    ];
+            }                    
+			      
+       ];
+        parent::__construct($config);
+
+    }
+
+}
+
+
 
 //----------------------------------------------------------------------------------------
 class PersonType extends ObjectType
@@ -72,7 +111,8 @@ class PersonType extends ObjectType
                     ],
                     
                     // names
-                                                    
+                                 
+                    /*                   
                     'givenName' => [
                         'type' => Type::string(),
                         'description' => "Given name."
@@ -82,6 +122,7 @@ class PersonType extends ObjectType
                         'type' => Type::string(),
                         'description' => "Family name."
                     ],
+                    */
                     
                     'name' => [
                         'type' => Type::listOf(Type::string()),
@@ -105,10 +146,12 @@ class PersonType extends ObjectType
                         'description' => "Description of person."
                     ],                                            
                     
+                    /*
                     'thumbnailUrl' => [
                         'type' => Type::string(),
                         'description' => "URL to a thumbnail view of the image."
                     ],
+                    */
                     
                     'works' => [
                         'type' => Type::listOf(TypeRegister::simpleWorkType()),
@@ -133,6 +176,7 @@ class PersonType extends ObjectType
 }
 
 //----------------------------------------------------------------------------------------
+// Work that we use in a list
 class SimpleWorkType extends ObjectType
 {
 
@@ -153,10 +197,10 @@ class SimpleWorkType extends ObjectType
                         'type' => Type::string(),
                         'description' => "DOI for this work."
                     ],
-                                     
-                    'name' => [
-                        'type' => Type::listOf(Type::string()),
-                        'description' => "Name of the work."
+                                                                                             
+                    'titles' => [
+                        'type' => Type::listOf(TypeRegister::titleType()),
+                        'description' => "Title of the work."
                     ],            
                     
                    'datePublished' => [
@@ -177,12 +221,307 @@ class SimpleWorkType extends ObjectType
 
 
 //----------------------------------------------------------------------------------------
+class WorkType extends ObjectType
+{
+
+    public function __construct()
+    {
+        error_log('WorkType');
+        $config = [
+			'description' =>  "A work such as a scientific article.",
+            'fields' => function(){
+                return [
+                     
+                    'id' => [
+                        'type' => Type::string(),
+                        'description' => "Id of work"
+                    ],  
+                    
+                    'author' => [
+                        'type' => Type::listOf(TypeRegister::PersonType()),
+                        'description' => "The main researchers involved in producing the data, or the authors of the publication."
+                    ],                                         
+                    
+                    
+                    'container' => [
+                        'type' => TypeRegister::ContainerType(),
+                        'description' => "The container (e.g. journal or book) that includes this work."
+                    ], 
+                                    
+                                                          
+                    'contentUrl' => [
+                        'type' => Type::string(),
+                        'description' => "URL to download content directly, if available."
+                    ],   
+                    
+                    'doi' => [
+                        'type' => Type::string(),
+                        'description' => "DOI for this work."
+                    ],
+                    
+                    'formattedCitation' => [
+                        'type' => Type::string(),
+                        'description' => "Metadata as formatted citation."
+                    ],
+                                                             
+                    'isbn' => [
+                        'type' =>  Type::listOf(Type::string()),
+                        'description' => "ISBN of work"
+                    ],  
+                                                        
+                    'titles' => [
+                        'type' => Type::listOf(TypeRegister::titleType()),
+                        'description' => "Title of the work."
+                    ],            
+                    
+                   'datePublished' => [
+                        'type' => Type::string(),
+                        'description' => "Publication date"
+                    ],
+                    
+                    // identifiers
+                    'identifier' => [
+                        'type' => Type::listOf(Type::string()),
+                        'description' => "Identifiers."
+                    ],                                         
+                                        
+                    // container
+                    
+                    // location in container
+                    
+                    'volumeNumber' => [
+                        'type' => Type::string(),
+                        'description' => "Volume."
+                    ],
+                
+                    'issueNumber' => [
+                        'type' => Type::string(),
+                        'description' => "Issue."
+                    ],                    
+
+                    'pageStart' => [
+                        'type' => Type::string(),
+                        'description' => "First page of work."
+                    ],
+
+                    'pageEnd' => [
+                        'type' => Type::string(),
+                        'description' => "Last page of work."
+                    ],
+
+                    'pagination' => [
+                        'type' => Type::string(),
+                        'description' => "Pages."
+                    ],
+                    
+                    
+                    // citation graph
+                    
+                    
+                    'cites' => [
+                        'type' => Type::listOf(TypeRegister::simpleWorkType()),
+                        'description' => "Works cited by this work (i.e., its bibliography)",
+                        
+                        // We need a separate function to populate this list
+                        // so we call that here and parse $thing->id as a parameter
+                        'resolve' => function($thing) {
+                    		return work_cites(array('id' => $thing->id));
+						}
+                    ],                                         
+                    
+                   'cited_by' => [
+                        'type' => Type::listOf(TypeRegister::simpleWorkType()),
+                        'description' => "Works citing this work (i.e., its citations)",
+                        
+                        // We need a separate function to populate this list
+                        // so we call that here and parse $thing->id as a parameter
+                        'resolve' => function($thing) {
+                    		return work_cited_by(array('id' => $thing->id));
+						}
+                    ],                                         
+                    
+                   'related' => [
+                        'type' => Type::listOf(TypeRegister::simpleWorkType()),
+                        'description' => "Related works",
+                        
+                        // We need a separate function to populate this list
+                        // so we call that here and parse $thing->id as a parameter
+                        'resolve' => function($thing) {
+                    		return work_related(array('id' => $thing->id));
+						}
+                    ],                                         
+                    
+                    
+                    // corrections
+                    'correction' => [
+                        'type' => Type::listOf(TypeRegister::simpleWorkType()),
+                        'description' => "Corrections or errata",
+                        
+                        // We need a separate function to populate this list
+                        // so we call that here and parse $thing->id as a parameter
+                        'resolve' => function($thing) {
+                    		return work_errata(array('id' => $thing->id));
+						}
+                    ],                                         
+                         
+                    // works about this work
+                    'subjectOf' => [
+                        'type' => Type::listOf(TypeRegister::simpleWorkType()),
+                        'description' => "Works about this work",
+                        
+                        // We need a separate function to populate this list
+                        // so we call that here and parse $thing->id as a parameter
+                        'resolve' => function($thing) {
+                    		return work_about(array('id' => $thing->id));
+						}
+                    ],                                         
+        
+                                                       
+                    ];
+            }                    
+			      
+       ];
+        parent::__construct($config);
+
+    }
+
+}
+
+//----------------------------------------------------------------------------------------
+class ContainerType extends ObjectType
+{
+    public function __construct()
+    {
+        error_log('ContainerType');
+        $config = [
+			'description' =>   "Information about containers for content.",
+            'fields' => function(){
+                return [
+                    'id' => [
+                        'type' => Type::ID(),
+                        'description' => "The ID of the container."
+                    ],
+                    
+                    // identifiers
+                    'identifier' => [
+                        'type' => Type::listOf(Type::string()),
+                        'description' => "Identifiers."
+                    ],                                         
+                    
+
+                    'issn' => [
+                        'type' => Type::listOf(Type::string()),
+                        'description' => "ISSN of container."
+                    ],
+
+                    'isbn' => [
+                        'type' => Type::listOf(Type::string()),
+                        'description' => "ISBN of container."
+                    ],
+                                                        
+                    'titles' => [
+                        'type' => Type::listOf(TypeRegister::titleType()),
+                        'description' => "Title of the work."
+                    ],            
+                    
+                   'startDate' => [
+                        'type' => Type::string(),
+                        'description' => "Date container started."
+                    ],
+
+                   'endDate' => [
+                        'type' => Type::string(),
+                        'description' => "Date container ended."
+                    ],  
+                                        
+                    'successorOf' => [
+                        'type' => Type::listOf(TypeRegister::containerType()),
+                        'description' => "Container that this container succeeds, e.g. the journal that preceeded this one."
+                    ],                
+                          
+                    'predecessorOf' => [
+                        'type' => Type::listOf(TypeRegister::containerType()),
+                        'description' => "Container that follows this one, e.g. the journal that succeeds this one."
+                    ],                
+            
+                    
+                    // works contained in this work
+                    'hasPart' => [
+                        'type' => Type::listOf(TypeRegister::simpleWorkType()),
+                        'description' => "Works contained in this container, e.g. articles in a journal",
+                        
+                        // We need a separate function to populate this list
+                        // so we call that here and parse $thing->id as a parameter
+                        'resolve' => function($thing) {
+                    		return work_parts(array('id' => $thing->id));
+						}
+                    ],   
+                    
+                             
+                    
+
+                ];
+            }                    
+			      
+       ];
+        parent::__construct($config);
+    }
+}
+
+//----------------------------------------------------------------------------------------
+// based on DataCite GraphQL
+class TitleType extends ObjectType
+{
+
+    public function __construct()
+    {
+        error_log('NameType');
+        $config = [
+			'description' =>   "Information about a title",
+            'fields' => function(){
+                return [
+                    'lang' => [
+                        'type' => Type::ID(),
+                        'description' => "Language."
+                    ],
+                
+                    'title' => [
+                        'type' => Type::string(),
+                        'description' => "Title."
+                    ]                    
+                   
+                    ];
+            }                    
+			      
+       ];
+        parent::__construct($config);
+
+    }
+
+}
+
+
+//----------------------------------------------------------------------------------------
 
 class TypeRegister {
 
+	private static $containerType;
+	private static $titleType;
 	private static $personType;
 	private static $simpleWorkType;
- 
+	private static $thingType;	
+	private static $workType;
+	
+ 	// container
+    public static function containerType(){
+        return self::$containerType ?: (self::$containerType = new ContainerType());
+    }  
+    
+ 	// title
+    public static function titleType(){
+        return self::$titleType ?: (self::$titleType = new TitleType());
+    }          
+	
  	// person
     public static function personType(){
         return self::$personType ?: (self::$personType = new PersonType());
@@ -191,7 +530,17 @@ class TypeRegister {
     // work in a list of works
     public static function simpleWorkType(){
         return self::$simpleWorkType ?: (self::$simpleWorkType = new SimpleWorkType());
-    }     
+    }  
+    
+    // thing
+    public static function thingType(){
+        return self::$thingType ?: (self::$thingType = new ThingType());
+    }      
+    
+    // work 
+    public static function workType(){
+        return self::$workType ?: (self::$workType = new WorkType());
+    }         
 
 }
 
@@ -214,6 +563,21 @@ $schema = new Schema([
             	}
         	],
         	
+          'container' => [
+                'type' => TypeRegister::containerType(),
+                'description' => 'Returns a container such as a journal or a book',
+                'args' => [
+                    'id' => [
+                        'type' => Type::string(),
+                        'description' => 'Identifier for container'
+                    ]
+                ],
+                'resolve' => function($rootValue, $args, $context, $info) {
+                    return container_query($args);
+                }
+            ],  
+         	
+        	
            'person' => [
                 'type' => TypeRegister::personType(),
                 'description' => 'Returns a person by their identifier',
@@ -227,6 +591,36 @@ $schema = new Schema([
                     return person_query($args);
                 }
             ],  
+            
+        	
+           'thing' => [
+                'type' => TypeRegister::thingType(),
+                'description' => 'Returns a thing, its name and its type',
+                'args' => [
+                    'id' => [
+                        'type' => Type::string(),
+                        'description' => 'Identifier for thing'
+                    ]
+                ],
+                'resolve' => function($rootValue, $args, $context, $info) {
+                    return thing_query($args);
+                }
+            ],  
+            
+            
+           'work' => [
+                'type' => TypeRegister::workType(),
+                'description' => 'Returns a work by its identifier',
+                'args' => [
+                    'id' => [
+                        'type' => Type::string(),
+                        'description' => 'Identifier for work'
+                    ]
+                ],
+                'resolve' => function($rootValue, $args, $context, $info) {
+                    return work_query($args);
+                }
+            ],              
         	
         ]
     ])
