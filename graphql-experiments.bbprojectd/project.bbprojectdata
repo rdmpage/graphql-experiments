@@ -8,6 +8,7 @@
 		<string>95385E02-261C-4965-9564-DE2141849D58</string>
 		<string>A99A8664-6853-4A1B-9310-B8E8154A079C</string>
 		<string>046EFFD9-8788-4741-AFFE-1B34DAA84DCF</string>
+		<string>EA9FCC4A-8A42-4CC6-B39B-4D6E92E2B49D</string>
 		<string>EECC4536-A781-47C3-9011-ACA9D064EB7D</string>
 		<string>2EE464B1-2CDB-4C3E-9A50-4DF5735EB61B</string>
 		<string>D32D5413-0855-4EF0-B863-5DF9C8E4EA09</string>
@@ -148,11 +149,11 @@
 				AAAAAOgBAIAMAgAAAAAAAA==
 				</data>
 				<key>FileURL</key>
-				<string>file:///Users/rpage/Sites/graphql-experiments/demo.html</string>
+				<string>file:///Users/rpage/Sites/graphql-experiments/index.html</string>
 				<key>HasSecurityScope</key>
 				<true/>
 				<key>RelativePath</key>
-				<string>./demo.html</string>
+				<string>./index.html</string>
 				<key>TypeID</key>
 				<string>_CFileLocator</string>
 				<key>Version</key>
@@ -356,6 +357,56 @@
 			</dict>
 			<key>ItemName</key>
 			<string>composer.json</string>
+			<key>ItemType</key>
+			<string>FileReference</string>
+			<key>UserOverrideItemName</key>
+			<true/>
+		</dict>
+		<key>EA9FCC4A-8A42-4CC6-B39B-4D6E92E2B49D</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9vaygDAAAAAAQQMAAAABL+wLckLwS/Lh9WFRC4jhX+
+				e/R/XNi2CWnus2NubEnkGAIAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAFAAAAAQEAAHJwYWdlAAAABQAA
+				AAEBAABTaXRlcwAAABMAAAABAQAAZ3JhcGhxbC1leHBl
+				cmltZW50cwAKAAAAAQEAAFF1ZXJpZXMubWQAABQAAAAB
+				BgAAEAAAACAAAAAwAAAAQAAAAFwAAAAIAAAABAMAABBn
+				AgAAAAAACAAAAAQDAACFdA0AAAAAAAgAAAAEAwAABFZM
+				AAAAAAAIAAAABAMAAGovxAgDAAAACAAAAAQDAABp9twI
+				AwAAABQAAAABBgAAjAAAAJwAAACsAAAAvAAAAMwAAAAI
+				AAAAAAQAAEHDuOss9dx+GAAAAAECAAABAAAAAAAAAA8A
+				AAAAAAAAAAAAAAAAAAAIAAAABAMAAAMAAAAAAAAABAAA
+				AAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAA
+				TWFjaW50b3NoIEhECAAAAAQDAAAA4MUydAAAAAgAAAAA
+				BAAAQb7dXWIAAAAkAAAAAQEAADI1RTQyODZELTcxMkMt
+				Mzg5OS1CNDNGLTVEM0Y2QThCRDEyMRgAAAABAgAAgQAA
+				AAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA
+				AAAAAAEFAAAaAAAAAQEAAE5TVVJMRG9jdW1lbnRJZGVu
+				dGlmaWVyS2V5AAAEAAAAAwMAAKCsAQDYAAAA/v///wEA
+				AAAAAAAAEQAAAAQQAABwAAAAAAAAAAUQAADcAAAAAAAA
+				ABAQAAAIAQAAAAAAAEAQAAD4AAAAAAAAAAIgAADUAQAA
+				AAAAAAUgAABEAQAAAAAAABAgAABUAQAAAAAAABEgAACI
+				AQAAAAAAABIgAABoAQAAAAAAABMgAAB4AQAAAAAAACAg
+				AAC0AQAAAAAAADAgAADgAQAAAAAAAAHAAAAoAQAAAAAA
+				ABHAAAAgAAAAAAAAABLAAAA4AQAAAAAAABDQAAAEAAAA
+				AAAAAOgBAIAMAgAAAAAAAA==
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/rpage/Sites/graphql-experiments/Queries.md</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./Queries.md</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>Queries.md</string>
 			<key>ItemType</key>
 			<string>FileReference</string>
 			<key>UserOverrideItemName</key>

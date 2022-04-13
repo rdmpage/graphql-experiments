@@ -670,8 +670,14 @@ function work_query($args)
 	//echo $sparql;
 	//exit();
 	
-	
 	$doc = one_object_query($args, $sparql);
+	
+	// in bad cases we may have > 1 DOI
+	// unique?
+	if (isset($doc->doi) && is_array($doc->doi))
+	{
+		$doc->doi = $doc->doi[0];
+	}	
 	
 	// container
 	if (isset($doc->container))
